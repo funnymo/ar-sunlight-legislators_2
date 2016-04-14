@@ -1,30 +1,55 @@
 require_relative 'db/config'
-
+require_relative 'app/models/representative'
+require_relative 'app/models/legislator'
+require_relative 'app/models/senator'
+require_relative 'app/models/state'
 #--------------------------------------------
 #Given any state, first print out the senators for that state (sorted by last name), then print out the representatives (also sorted by last name). Include the party affiliation next to the name. The output might look something like this:
 
-def list_senators(z)
+
+def list_rep(z)
+  results = ""
+  puts "Reps:"
+  rep = Representative.where("state = ? AND title =?", z, "Rep").order(:lastname)
+  rep.each do |x|
+    puts "#{x.firstname} #{x.lastname} -- #{x.party}"
+  end
+end
+
+def list_sen(z)
+  results = ""
   puts "Senators:"
-
-  a = Legislator.where("state = ? AND title =?", z, "Sen")
-  a.each do |x|
-    puts "#{x.firstname}" + " " + "#{x.middlename}" + " " + "#{x.lastname}" + " (" + "#{x.party}"+")"
-  end
-end
-
-def list_representatives(z)
-  puts "Representatives:"
-
-  a = Legislator.where("state = ? AND title =?", z, "Rep")
-  a.each do |x|
-    puts "#{x.firstname}" + " " + "#{x.middlename}" + " " + "#{x.lastname}" + " (" + "#{x.party}"+")"
-  end
+  sen = Senator.where("state=? AND title=?", z,"Sen").order(:lastname)
+  sen.each do|x|
+    puts "#{x.firstname} #{x.lastname} -- #{x.party}"
+  end    
 end
 
 
-# list_senators("CA")
 
-# list_representatives("CA")
+
+# def list_senators(z)
+#   puts "Senators:"
+
+#   a = Legislator.where("state = ? AND title =?", z, "Sen")
+#   a.each do |x|
+#     puts "#{x.firstname}" + " " + "#{x.middlename}" + " " + "#{x.lastname}" + " (" + "#{x.party}"+")"
+#   end
+# end
+
+# def list_representatives(z)
+#   puts "Representatives:"
+
+#   a = Legislator.where("state = ? AND title =?", z, "Rep")
+#   a.each do |x|
+#     puts "#{x.firstname}" + " " + "#{x.middlename}" + " " + "#{x.lastname}" + " (" + "#{x.party}"+")"
+#   end
+# end
+
+
+list_sen("CA")
+
+list_rep("CA")
 
 #------------------------------------------
 # Given a gender, print out what number and percentage of the senators are of that gender as well as what number and percentage of the representatives, being sure to include only those congresspeople who are actively in office, e.g.:
@@ -101,7 +126,7 @@ p a.count
 p b.count
 end
 
-bla
+# bla
 
 #------------------------------------------
 #Now use ActiveRecord to delete from your database any congresspeople who are not actively in office, then re-run your count to make sure that those rows were deleted.
