@@ -40,39 +40,36 @@ end
 
 # list_sen_state("CA")
 # list_rep_state("CA")
-list_sen_party("D")
-list_rep_party("D")
+# list_sen_party("D")
+# list_rep_party("D")
 
 #------------------------------------------
 # Given a gender, print out what number and percentage of the senators are of that gender as well as what number and percentage of the representatives, being sure to include only those congresspeople who are actively in office, e.g.:
 
-def calc_sen
+def calc_sen_male
+  a = Senator.where("title = ?","Sen")
+  allsenator = a.count
 
-a = Legislator.where("title = ?","Sen")
-allsenator = a.count
+  a = Senator.where("gender = ? AND title = ?", "M", "Sen")
+  malesenator = a.count
 
-a = Legislator.where("gender = ? AND title = ?", "M", "Sen")
-malesenator = a.count
-
-percentage = ((malesenator.to_f/ allsenator.to_f)*100).to_i
-puts "Male Senators:" + " "+ percentage.to_s + "%"
+  percentage = ((malesenator.to_f/ allsenator.to_f)*100).to_i
+  puts "Male Senators:" + " "+ percentage.to_s + "%"
 end
 
+def calc_rep_male
+  a = Representative.where("title = ?","Rep")
+  allrep = a.count
 
-def calc_rep
+  a = Representative.where("gender = ? AND title = ?", "M", "Rep")
+  malerep = a.count
 
-a = Legislator.where("title = ?","Rep")
-allrep = a.count
-
-a = Legislator.where("gender = ? AND title = ?", "M", "Rep")
-malerep = a.count
-
-percentage = ((malerep.to_f/ allrep.to_f)*100).to_i
-puts "Male Reps:" + " "+ percentage.to_s+ "%"
+  percentage = ((malerep.to_f/ allrep.to_f)*100).to_i
+  puts "Male Reps:" + " "+ percentage.to_s+ "%"
 end
 
-# calc_sen
-# calc_rep
+# calc_sen_male
+# calc_rep_male
 
 #------------------------------------------
 
@@ -112,29 +109,29 @@ end
 #For Senators and Representatives, count the total number of each (regardless of whether or not they are actively in office).
 
 def bla
-a = Legislator.where("title = ?", "Sen")
-b = Legislator.where("title = ?", "Rep")
-p a.count
-p b.count
+a = Senator.where("title = ?", "Sen")
+b = Representative.where("title = ?", "Rep")
+p "Senators: #{a.count}"
+p "Representatives: #{b.count}"
 end
 
-# bla
+bla
 
 #------------------------------------------
 #Now use ActiveRecord to delete from your database any congresspeople who are not actively in office, then re-run your count to make sure that those rows were deleted.
 
 def del
-  a = Legislator.where("in_office = ? AND title =?", false ,'Sen').destroy_all
-    b = Legislator.where("in_office = ? AND title =?", false,'Rep').destroy_all
+  a = Senator.where("in_office = ? AND title =?", false ,'Sen').destroy_all
+    b = Representative.where("in_office = ? AND title =?", false,'Rep').destroy_all
 #check if deleted
-  c = Legislator.where("title = ?",'Sen')
-  d = Legislator.where("title = ?",'Rep')
-p c.count
-p d.count
+  c = Senator.where("title = ?",'Sen')
+  d = Representative.where("title = ?",'Rep')
+p "Senators: #{c.count}"
+p "Representatives: #{d.count}"
 
 end
 
-# del
+del
 
 
 #--------------------------------------
